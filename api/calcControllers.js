@@ -9,7 +9,7 @@ const CalcServiceInstance = new CalcService();
 async function addTwoNumbers(req, res) {
     try {
         const addResult = await CalcServiceInstance.addTwoNumbers(req.body);
-        return res.send(addResult);
+        return res.status(200).send(addResult);
     } catch (err) {
         res.status(400).send(err);
     }
@@ -23,7 +23,7 @@ async function addTwoNumbers(req, res) {
 async function getNumbersAverage(req, res) {
     try {
         const averageResult = await CalcServiceInstance.getNumbersAverage(req.body);
-        return res.send(averageResult);
+        return res.status(200).send(averageResult);
     } catch (err) {
         res.status(400).send(err);
     }
