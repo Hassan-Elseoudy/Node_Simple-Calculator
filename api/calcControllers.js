@@ -2,13 +2,13 @@ const CalcService = require("../service/calcService");
 const CalcServiceInstance = new CalcService();
 
 /**
- * @description Adding two numbers controller, it handles request and pass the body to the service and get the result back
+ * @description Adding two numbers controller, it handles request and pass the params to the service and get the result back
  * @param req {object} Express req object [2 numbers]
  * @param res {object} Express res object
  */
 async function addTwoNumbers(req, res) {
     try {
-        const addResult = await CalcServiceInstance.addTwoNumbers(req.body);
+        const addResult = await CalcServiceInstance.addTwoNumbers(req.query);
         return res.status(200).send(addResult);
     } catch (err) {
         res.status(400).send(err);

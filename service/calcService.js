@@ -62,7 +62,8 @@ class CalcService {
         // averaging
         let sum = 0
         for (let i = 0; i < numbersToBeAveraged.numbers.length; i++)
-            sum += numbersToBeAveraged.numbers[i]
+            sum += parseFloat(numbersToBeAveraged.numbers[i].toString());
+
 
         if (sum == 0)
             return {
@@ -72,7 +73,7 @@ class CalcService {
 
         return {
             success: true,
-            result: (sum * 1.0 / numbersToBeAveraged.numbers.length)
+            result: (sum / numbersToBeAveraged.numbers.length)
         };
     }
 

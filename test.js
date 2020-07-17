@@ -57,8 +57,3 @@ describe("Calc Service", () => {
 
   });
 });
-
-
-/*
-
-*/
