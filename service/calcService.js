@@ -4,38 +4,37 @@ class CalcService {
 
 
     /**
-     * @description Create an instance of CalcService
-     */
-
-    constructor() {}
-
-    /**
      * @description Attempt to add 2 numbers together and check over them
      * We validate the two numbers using Joi validator.
      * 
-     * @param postToCreate {object} Object containing 2 numbers
+     * @param numbersToBeAdded {object} Object containing 2 numbers
      * @returns {Promise<{success: boolean, error: *}|{success: boolean, body: *}>}
      */
     async addTwoNumbers(numbersToBeAdded) {
-        firstNumber = parseFloat(numbersToBeAdded.firstNumber);
-        secondNumber = parseFloat(numbersToBeAdded.firstNumber);
 
-        const schema = {
-            firstNumber : Joi.number().required,
-            secondNumber : Joi.number().required
-        }
+        // Creating a scheme for the input
+        const schema = Joi.object({
+            firstNumber: Joi.number().required(),
+            secondNumber: Joi.number().required()
+        })
 
-        const validationResult = Joi.validate(numbersToBeAdded, schema)
+        // Validate input to be a number and required element
+        const validationResult = schema.validate(numbersToBeAdded)
 
-        if (validationResult.error)
+        if (validationResult.error) {
             return {
                 success: false,
-                error: "Two numbers aren't well formatted, please try again!"
+                error: validationResult.error.details[0].message
             }
+        }
+
+        // parsing the two numbers to be float
+        let firstNumber = parseFloat(numbersToBeAdded.firstNumber);
+        let secondNumber = parseFloat(numbersToBeAdded.secondNumber);
 
         return {
             success: true,
-            body: firstNumber + secondNumber
+            result: firstNumber + secondNumber
         };
     }
 
@@ -46,10 +45,13 @@ class CalcService {
      */
     async getNumbersAverage(numbersToBeAveraged) {
 
-        const schema = {
-            numbers: Joi.array().items(Joi.number).min(1)
-        }
-        const validateSchema = Joi.validate(schema, numbersToBeAveraged)
+        // Creating a scheme for the input (array name is `numbers` and validate scheme (array lenght must be +1))
+        const schema = Joi.object({
+            numbers: Joi.array().items(Joi.number()).min(1)
+        })
+
+        // Scheme validation
+        const validateSchema = schema.validate(numbersToBeAveraged)
 
         if (validateSchema.error)
             return {
@@ -57,11 +59,12 @@ class CalcService {
                 error: validateSchema.error.details[0].message
             }
 
+        // averaging
         let sum = 0
-        for (let i = 0; i < numbersToBeAveraged; i++)
-            sum += numbersToBeAveraged[i]
+        for (let i = 0; i < numbersToBeAveraged.numbers.length; i++)
+            sum += numbersToBeAveraged.numbers[i]
 
-        if (sum === 0)
+        if (sum == 0)
             return {
                 success: false,
                 error: "Division By Zero!"
@@ -69,7 +72,7 @@ class CalcService {
 
         return {
             success: true,
-            body: (sum * 1.0 / numbersToBeAveraged.length)
+            result: (sum * 1.0 / numbersToBeAveraged.numbers.length)
         };
     }
 
